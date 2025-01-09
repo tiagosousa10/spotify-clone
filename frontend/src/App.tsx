@@ -8,8 +8,11 @@ function App() {
     <>
       <header>
       <SignedOut>
-        <SignInButton />
+        <SignInButton>
+          <Button>Sign In</Button>
+        </SignInButton>
       </SignedOut>
+      
       <SignedIn>
         <UserButton />
       </SignedIn>
