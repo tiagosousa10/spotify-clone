@@ -15,6 +15,8 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(express.json()) // to parse req.body
+
 app.use("/api/users", userRoutes) //users using userRoutes
 app.use("/api/admin", adminRoutes) //admin using adminRoutes
 app.use("/api/auth", authRoutes) //auth using authRoutes
