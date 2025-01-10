@@ -1,6 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import {clerkMiddleware} from '@clerk/express'
+import fileUpload from "express-fileupload"
+import path from "path"
 
 import { connectDB } from "./lib/db.js";
 
@@ -14,10 +16,19 @@ import statRoutes from './routes/stats.route.js'
 dotenv.config();
 
 const app = express();
+const __dirname = path.resolve(); //get current directory
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json()) // to parse req.body
 app.use(clerkMiddleware()) // this will add auth to req obj => req.auth.userId
+app.use(fileUpload({
+  useTempFiles:true,
+  tempFileDir: path.join(__dirname, "tmp"), //store files in temp folder
+  createParentPath:true,
+  limits:{
+    fileSize: 10*1024*1024 //10mb max file size
+  }
+}))
 
 app.use("/api/users", userRoutes) //users using userRoutes
 app.use("/api/admin", adminRoutes) //admin using adminRoutes
@@ -25,6 +36,11 @@ app.use("/api/auth", authRoutes) //auth using authRoutes
 app.use("/api/songs", songRoutes) //songs using songRoutes
 app.use("/api/albums", albumRoutes) //albums using albumRoutes
 app.use("/api/stats", statRoutes) //stats using statsRoutes
+
+// error handler middleware
+app.use((err,req,res,next) => {
+  res.status(500).json({message: process.env.NODE_ENV === "production" ? "Internal Server Error" : err.message})
+})
 
 app.listen(PORT, () => {
   console.log("nodemon. Server is running on port " + PORT)
