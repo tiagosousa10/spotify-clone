@@ -1,5 +1,23 @@
-import { Song } from "../models/song.model";
-import { Album } from "../models/album.model";
+import { Song } from "../models/song.model.js";
+import { Album } from "../models/album.model.js";
+import cloudinary from "../lib/cloudinary.js";
+
+
+// helper function to upload file to cloudinary
+const uploadToCloudinary =  async (file) => { //file is the audioFile or imageFile
+try {
+  const result = await cloudinary.uploader.upload(file.tempFilePath, {
+    resource_type: "auto"
+  }) 
+
+  return result.secure_url //return secure url
+} catch(error) {
+  console.log("Error in uploading file to cloudinary", error)
+  throw new Error("Error in uploading file to cloudinary")
+}
+}
+
+
 export const createSong = async (req,res, next) => {
   try {
     if(!req.files || !req.files.audioFile || !req.files.imageFile) {
@@ -9,6 +27,9 @@ export const createSong = async (req,res, next) => {
     const {title,artist,albumId,duration} = req.body; //get song details
     const audioFile = req.files.audioFile //get audio file
     const imageFile = req.files.imageFile //get image file
+
+    const audioUrl = await uploadToCloudinary(audioFile) //upload audio file to cloudinary
+    const imageUrl = await uploadToCloudinary(imageFile) //upload image file to cloudinary
 
     const song = new Song({ //create new song
       title,
@@ -34,5 +55,30 @@ export const createSong = async (req,res, next) => {
 
   } catch(error) {
     next(error); 
+  }
+}
+
+
+export const deleteSong = async( req, res, next) => {
+  try {
+    const {id} = req.params;
+
+    const song = await Song.findById(id) //find song by id
+
+    //if song belongs to an album , update the album's songs array
+    if(song.albumId){
+      await Album.findByIdAndUpdate(song.albumId, { //update album
+        $pull: { //remove song from album's songs array
+          songs: song._id
+        }
+      })
+    }
+
+    await Song.findByIdAndDelete(id) //delete song from db
+
+    res.status(200).json({message: "Song deleted successfully"})
+  } catch(error) {
+    console.log("Error in deleting song", error)
+    next(error)
   }
 }
