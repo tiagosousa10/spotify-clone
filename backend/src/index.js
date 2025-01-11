@@ -11,7 +11,7 @@ import adminRoutes from './routes/admin.route.js'
 import authRoutes from './routes/auth.route.js'
 import songRoutes from './routes/song.route.js'
 import albumRoutes from './routes/album.route.js'
-import statRoutes from './routes/stats.route.js'
+import statRoutes from './routes/stat.route.js'
 
 dotenv.config();
 
