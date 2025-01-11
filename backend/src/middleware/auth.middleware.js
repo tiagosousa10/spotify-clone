@@ -20,6 +20,6 @@ export const requireAdmin = async (req,res,next) => {
 
     next(); //if current user is admin
   }   catch(error) {
-    res.status(500).json({message: "Internal Server Error", error})
+    next(error)
   }
 }

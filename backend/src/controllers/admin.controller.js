@@ -18,7 +18,7 @@ try {
 }
 
 
-export const createSong = async (req,res, next) => {
+export const createSong = async (req, res, next) => {
   try {
     if(!req.files || !req.files.audioFile || !req.files.imageFile) {
       return res.status(400).json({message: "Please upload all files"})
@@ -124,4 +124,9 @@ export const deleteAlbum = async (req,res,next) => {
     console.log("Error in deleting album", error)
     next(error)
   }
+}
+
+
+export const checkAdmin = async(req,res,next) => {
+  res.status(200).json({admin: "true"})
 }
