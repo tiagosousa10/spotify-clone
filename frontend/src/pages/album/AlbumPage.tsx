@@ -5,6 +5,11 @@ import { Clock, Play } from 'lucide-react'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
+const formatDuration = (seconds:number) => {
+   const minutes = Math.floor(seconds/60); //get minutes
+   const remainingSeconds = seconds % 60 ;//get seconds
+   return `${minutes}:${remainingSeconds.toString().padStart(2,'0')}` //padStart to add 0 if seconds is less than 10
+}
 
 const AlbumPage = () => {
    const {albumId} = useParams() //get album id from url params
@@ -89,11 +94,9 @@ const AlbumPage = () => {
                                     <div className='font-medium text-white'> {song.title} </div>
                                     <div>{song.artist}</div>
                                  </div>
-
-                                 <div className='flex items-center'>{song.createdAt.split("T")[0]}</div>
-                                 <div className='flex items-center'>{song.duration}</div>
-
                               </div>
+                              <div className='flex items-center'>{song.createdAt.split("T")[0]}</div>
+                              <div className='flex items-center'>{formatDuration(song.duration)}</div>
                         </div>
                      ))}
                   </div>
