@@ -19,7 +19,7 @@ export const useMusicStore = create<MusicStore>((set) =>({
    albums: [],
    isLoading : false,
    error:null,
-   currentAlbum: null,
+   currentAlbum: null ,
 
 
    fetchAlbums: async () => {
