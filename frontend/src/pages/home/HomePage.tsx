@@ -18,12 +18,12 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchFeaturedSongs();
-    fetchFeaturedSongs();
+    fetchTrendingSongs();
     fetchMadeForYouSongs();
 
   }, [fetchFeaturedSongs, fetchMadeForYouSongs, fetchTrendingSongs])
 
-  console.log("info: ", isLoading, madeForYouSongs, featuredSongs, trendingSongs)
+  console.log("info: ", madeForYouSongs)
 
   return (
     <main className="rounded-md overflow-hidden h-full bg-gradient-to-b from-zinc-800 to-zinc-900">
@@ -32,12 +32,12 @@ const HomePage = () => {
         <div className="p-4 sm:p-6">
           <h1 className="text-2xl sm:text-3xl font-bold mb-6">Good afternoon</h1>
           <FeaturedSection/>
-        </div>  
-
+       
         <div className="space-y-8">
-          <SectionGrid title={"Made For You"} songs={madeForYouSongs} />
+          <SectionGrid title={"Made For You"} songs={madeForYouSongs} isLoading={isLoading} />
           <SectionGrid title={"Trending"} songs={trendingSongs} isLoading={isLoading} />
         </div>
+        </div>  
       </ScrollArea>
     </main>
   )

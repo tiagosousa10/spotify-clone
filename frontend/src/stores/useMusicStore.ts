@@ -80,7 +80,7 @@ export const useMusicStore = create<MusicStore>((set) =>({
       set({isLoading:true, error:null})
       try {
          const response = await axiosInstance.get("/songs/made-for-you")
-         set({madeForYou: response.data})
+         set({madeForYouSongs: response.data})
 
       } catch(error:any) {
          set({error: error.response.data.message})
@@ -92,16 +92,16 @@ export const useMusicStore = create<MusicStore>((set) =>({
 
 
    fetchTrendingSongs: async () => {
-      set({isLoading:true,error:null})
-      try {
-         const response = await axiosInstance.get("/songs/trending")
-         set({trendingSongs: response.data})
+		set({ isLoading: true, error: null });
+		try {
+			const response = await axiosInstance.get("/songs/trending");
+			set({ trendingSongs: response.data });
 
-      } catch(error:any) {
-         set({error: error.response.data.message}) 
-
-      } finally {
-         set({isLoading:false})
-      }
-   },
+		} catch (error: any) {
+			set({ error: error.response.data.message });
+         
+		} finally {
+			set({ isLoading: false });
+		}
+	},
 }))
