@@ -15,6 +15,7 @@ interface MusicStore {
 
 
 export const useMusicStore = create<MusicStore>((set) =>({
+   //initial state
    songs: [],
    albums: [],
    isLoading : false,

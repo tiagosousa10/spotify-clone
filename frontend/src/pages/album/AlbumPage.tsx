@@ -27,7 +27,7 @@ const AlbumPage = () => {
 
   return (
     <div className='h-full '>
-      <ScrollArea className='h-full'>
+      <ScrollArea className='h-full rounded-md'>
          {/*main content */}
          <div className=' relative min-h-full'>
             {/*bg gradient */}
@@ -36,6 +36,7 @@ const AlbumPage = () => {
              to-zinc-900 pointer-events-none' 
             area-hidden='true'
             />
+            
             {/*content */}
             <div className='relative z-10 '>
                <div className='flex p-6 gap-6 pb-8'>

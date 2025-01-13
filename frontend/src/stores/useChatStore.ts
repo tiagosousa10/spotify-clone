@@ -10,6 +10,7 @@ interface ChatStore {
 
 
 export const useChatStore = create<ChatStore>((set) => ({
+   //initial state
    users: [],
    isLoading: false,
    error: null,
