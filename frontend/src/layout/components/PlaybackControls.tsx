@@ -1,4 +1,6 @@
+import { Button } from "@/components/ui/button"
 import { usePlayerStore } from "@/stores/usePlayerStore"
+import { Pause, Play, Repeat, Shuffle, SkipBack, SkipForward } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 
 export const PlaybackControls = () => {
@@ -63,8 +65,55 @@ export const PlaybackControls = () => {
 							</div>
 						</>
 					)}
-				</div>
+			</div>
       
+         		{/* player controls*/}
+				<div className='flex flex-col items-center gap-2 flex-1 max-w-full sm:max-w-[45%]'>
+					<div className='flex items-center gap-4 sm:gap-6'>
+						<Button
+							size='icon'
+							variant='ghost'
+							className='hidden sm:inline-flex hover:text-white text-zinc-400'
+						>
+							<Shuffle className='h-4 w-4' />
+						</Button>
+
+						<Button
+							size='icon'
+							variant='ghost'
+							className='hover:text-white text-zinc-400'
+							onClick={playPrevious}
+							disabled={!currentSong}
+						>
+							<SkipBack className='h-4 w-4' />
+						</Button>
+
+						<Button
+							size='icon'
+							className='bg-white hover:bg-white/80 text-black rounded-full h-8 w-8'
+							onClick={togglePlay}
+							disabled={!currentSong}
+						>
+							{isPlaying ? <Pause className='h-5 w-5' /> : <Play className='h-5 w-5' />}
+						</Button>
+						<Button
+							size='icon'
+							variant='ghost'
+							className='hover:text-white text-zinc-400'
+							onClick={playNext}
+							disabled={!currentSong}
+						>
+							<SkipForward className='h-4 w-4' />
+						</Button>
+						<Button
+							size='icon'
+							variant='ghost'
+							className='hidden sm:inline-flex hover:text-white text-zinc-400'
+						>
+							<Repeat className='h-4 w-4' />
+						</Button>
+					</div>
+      </div>
       </div>
    </footer>
 }
