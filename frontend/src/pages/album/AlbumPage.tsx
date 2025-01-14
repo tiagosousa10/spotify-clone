@@ -63,7 +63,7 @@ const AlbumPage = () => {
             <div className='relative z-10 '>
                <div className='flex p-6 gap-6 pb-8'>
                   <img src={currentAlbum?.['imageUrl']}  alt={currentAlbum?.['title']}
-                  className='w-[240px] h-[240px] shadow-xl rounded' 
+                     className='w-[240px] h-[240px] shadow-xl rounded' 
                   />
                   <div className='flex flex-col justify-end'>
                      <p className='text-sm font-medium'>Album</p>
