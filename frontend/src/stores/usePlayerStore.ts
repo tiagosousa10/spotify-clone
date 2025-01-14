@@ -55,13 +55,63 @@ export const usePlayerStore = create<PlayerStore>((set,get) => ({
       set({
          currentSong: song,
          isPlaying:true,
-         currentIndex: songIndex !== -1 ? songIndex : get().currentIndex
+         currentIndex: songIndex !== -1 ? songIndex : get().currentIndex //if song is not in queue, use current index
       })
    },
 
 
-   togglePlay: () => {},
-   playNext: () => {},
-   playPrevious: () => {}
+   togglePlay: () => {
+      const willStartPlaying = !get().isPlaying; //if player is not playing, start playing
+
+      //negate the isPlaying value
+      set({ 
+         isPlaying: willStartPlaying
+      })
+   },
+
+
+   playNext: () => {
+      const {currentIndex, queue} = get()
+      const nextIndex = currentIndex + 1 //get next index
+
+      //if there is a next song, set it as current song, lets play it
+      if(nextIndex < queue.length) {
+         const nextSong = queue[nextIndex]
+
+         set({
+            currentSong: nextSong,
+            currentIndex: nextIndex,
+            isPlaying:true
+         })
+      } else {
+         // no next song on the list
+         set({
+            isPlaying:false
+         })
+      }
+   },
+
+
+   playPrevious: () => {
+      const {currentIndex, queue} = get()
+      const prevIndex = currentIndex - 1 //get previous index
+
+      //there is a prev song
+      if(prevIndex >= 0) {
+         const prevSong = queue[prevIndex]
+         
+         set({
+            currentSong:prevSong,
+            currentIndex: prevIndex,
+            isPlaying: true
+         })
+         
+      } else {
+
+         set({
+            isPlaying: false
+         })
+      }
+   }
 
 }))
