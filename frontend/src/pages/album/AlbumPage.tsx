@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useMusicStore } from '@/stores/useMusicStore'
 import { usePlayerStore } from '@/stores/usePlayerStore'
-import { Clock, Play } from 'lucide-react'
+import { Clock, Pause, Play } from 'lucide-react'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -84,7 +84,11 @@ const AlbumPage = () => {
                      onClick={handlePlayAlbum}
                      className="w-14 h-14 rounded-full bg-green-500 hover:scale-105 transition-all"
                      >
-                     <Play className='h-7 w-7 text-black' />
+                        {isPlaying && currentAlbum.songs.some((song) => song._id === currentSong?._id) ? (
+                           <Pause className='h-7 w-7 text-black' />
+                        ) : (
+                           <Play className='h-7 w-7 text-black' />
+                        )}
                   </Button>
                </div>
 

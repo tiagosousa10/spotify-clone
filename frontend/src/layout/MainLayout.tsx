@@ -4,6 +4,7 @@ import LeftSidebar from "./components/LeftSidebar"
 import FriendsActivity from "./components/FriendsActivity"
 import AudioPlayer from "./components/AudioPlayer"
 
+
 const MainLayout = () => {
    const isMobile = false
    return (
