@@ -22,6 +22,7 @@ interface MusicStore {
    fetchStats: () => Promise<void> //for admin dashboard
    fetchSongs: () => Promise<void> //for admin dashboard
    deleteSong: (id:string) => Promise<void>; //for admin dashboard
+   deleteAlbum: (id:string) => Promise<void>;
 
 }
 
@@ -63,6 +64,29 @@ export const useMusicStore = create<MusicStore>((set) =>({
       }
    }, 
 
+   
+   deleteAlbum: async (id:string) => {
+      set({isLoading: true, error: null})
+      try {
+         await axiosInstance.delete(`/admin/albums/${id}`)
+
+         set(state => ({ //update state
+            albums: state.albums.filter((album) => album._id !== id),//  filter out deleted album
+            songs: state.songs.map(
+               (song) => song.albumId === state.albums.find((a) => a._id ===id)?.title ? 
+               {...song, albumId: null} : song) //update song's albumId
+         }))
+
+         toast.success("Album deleted successfully")
+
+      } catch(error:any) {
+         console.log("Error in deleting Album", error)
+         toast.error("Error deleting Album")
+
+      } finally {
+         set({isLoading: false})
+      }
+   }, 
 
 
    fetchSongs: async () => {
