@@ -41,6 +41,8 @@ export const useMusicStore = create<MusicStore>((set) =>({
       totalArtists:0,
    },
 
+
+
    fetchSongs: async () => {
       set({isLoading: true, error: null})
       try {
@@ -49,11 +51,27 @@ export const useMusicStore = create<MusicStore>((set) =>({
          
       } catch(error:any) {
          set({error: error.response.data.message})
+      } finally {
+         set({isLoading: false})
       }
    },
 
    
-   fetchStats: async () => {},
+   fetchStats: async () => {
+      set({isLoading: true, error: null})
+
+      try {
+         const res = await axiosInstance.get("/stats")
+         set({stats: res.data})
+
+
+      } catch(error: any) {
+         set({error: error.response.data.message})
+
+      } finally {
+         set({isLoading: false})
+      }
+   },
 
 
    fetchAlbums: async () => {
