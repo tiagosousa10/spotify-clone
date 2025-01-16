@@ -133,7 +133,35 @@ const AddSongDialog = () => {
 						/>
 					</div>
 
-               
+               <div className='space-y-2'>
+						<label className='text-sm font-medium'>Album (Optional)</label>
+						<Select
+							value={newSong.album}
+							onValueChange={(value) => setNewSong({ ...newSong, album: value })}
+						>
+							<SelectTrigger className='bg-zinc-800 border-zinc-700'>
+								<SelectValue placeholder='Select album' />
+							</SelectTrigger>
+							<SelectContent className='bg-zinc-800 border-zinc-700'>
+								<SelectItem value='none'>No Album (Single)</SelectItem>
+								{albums.map((album) => (
+									<SelectItem key={album._id} value={album._id}>
+										{album.title}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
+         </div>
+
+         <DialogFooter>
+					<Button variant='outline' onClick={() => setSongDialogOpen(false)} disabled={isLoading}>
+						Cancel
+					</Button>
+					<Button onClick={handleSubmit} disabled={isLoading}>
+						{isLoading ? "Uploading..." : "Add Song"}
+					</Button>
+				</DialogFooter>
       </DialogContent>
    </Dialog>
   )
