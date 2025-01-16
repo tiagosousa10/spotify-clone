@@ -6,12 +6,13 @@ import { useMusicStore } from "@/stores/useMusicStore"
 import { Plus, Upload } from "lucide-react"
 import { useRef, useState } from "react"
 import toast from "react-hot-toast"
+import {axiosInstance} from "@/lib/axios"
 
-type newSong = {
+type NewSong = {
    title: string,
    artist: string,
    album: string,
-   duration: number | string
+   duration: string
 }
 
 const AddSongDialog = () => {
@@ -19,11 +20,11 @@ const AddSongDialog = () => {
    const [songDialogOpen,setSongDialogOpen] = useState(false)
    const [isLoading,setIsLoading] = useState(false)
 
-   const [newSong,setNewSong] = useState<newSong>({
+   const [newSong,setNewSong] = useState<NewSong>({
       title: "",
       artist:"",
       album:"",
-      duration:0
+      duration:"0"
    })
 
    const [files,setFiles] = useState<{audio: File | null , image: File | null}>({
@@ -43,14 +44,43 @@ const AddSongDialog = () => {
             return toast.error("Please upload both audio and image files")
          }
 
-         const formData = new FormData()
+         const formData = new FormData() 
 
-         formData.append("title", newSong.title) // 
-			formData.append("artist", newSong.artist)
-			formData.append("album", newSong.album)
-      } catch(error) {
-			console.log("Error in adding song", error)
-      }
+         formData.append("title", newSong.title) //get title from newSong state to be sent to backend
+			formData.append("artist", newSong.artist)  // get artist from newSong state to be sent to backend
+			formData.append("duration", newSong.duration) // get duration from newSong state to be sent to backend
+
+			if(newSong.album && newSong.album !== "none") { // if album is selected
+				formData.append("albumId", newSong.album) //append albumId to formData to be sent to backend
+			}
+
+			formData.append("audioFile", files.audio) //append audio file to formData to be sent to backend
+			formData.append("imageFile", files.image) //append image file to formData to be sent to backend
+
+			await axiosInstance.post("/admin/songs", formData, { //create new song with all formData fields
+				headers: {
+					"Content-Type": "multipart/form-data" //set content type to multipart/form-data
+
+				}
+			})
+
+			setNewSong({ //reset newSong
+				title: "",
+				artist: "",
+				album: "",
+				duration: "0"
+			})
+
+			setFiles({ //reset files
+				audio: null,
+				image: null
+			})
+
+			toast.success("Song added successfully")
+
+      } catch(error: any) {
+			toast.error("Failed to add song", error)
+		}
    }
 
   return (
@@ -145,7 +175,7 @@ const AddSongDialog = () => {
 							type='number'
 							min='0'
 							value={newSong.duration}
-							onChange={(e) => setNewSong({ ...newSong, duration: parseInt(e.target.value) || "0" })}
+							onChange={(e) => setNewSong({ ...newSong, duration: (e.target.value) || "" })}
 							className='bg-zinc-800 border-zinc-700'
 						/>
 					</div>
