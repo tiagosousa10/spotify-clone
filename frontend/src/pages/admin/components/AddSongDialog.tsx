@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useMusicStore } from "@/stores/useMusicStore"
 import { Plus, Upload } from "lucide-react"
 import { useRef, useState } from "react"
+import toast from "react-hot-toast"
 
 type newSong = {
    title: string,
@@ -34,7 +35,23 @@ const AddSongDialog = () => {
    const audioInputRef = useRef<HTMLInputElement>(null)
    const imageInputRef = useRef<HTMLInputElement>(null)
 
-   const handleSubmit =async () => {}
+   const handleSubmit =async () => {
+      setIsLoading(true);
+
+      try {
+         if(!files.audio || !files.image) {
+            return toast.error("Please upload both audio and image files")
+         }
+
+         const formData = new FormData()
+
+         formData.append("title", newSong.title) // 
+			formData.append("artist", newSong.artist)
+			formData.append("album", newSong.album)
+      } catch(error) {
+			console.log("Error in adding song", error)
+      }
+   }
 
   return (
     <Dialog open={songDialogOpen} onOpenChange={setSongDialogOpen}>
