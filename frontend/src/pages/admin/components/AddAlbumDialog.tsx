@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -11,8 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { axiosInstance } from "@/lib/axios";
 import { Plus, Upload } from "lucide-react";
-import { useRef, useState } from "react";
 import toast from "react-hot-toast";
+
 
 const AddAlbumDialog = () => {
 	const [albumDialogOpen, setAlbumDialogOpen] = useState(false);
