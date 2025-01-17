@@ -84,6 +84,29 @@ export const useChatStore = create<ChatStore>((set,get) => ({
             return {onlineUsers : newOnlineUsers} //return new onlineUsers
          })
       })
+
+      socket.on("receive_message", (message:Message) => {
+         set((state) => ({
+           messages: [...state.messages, message] //add new message to messages
+         }))
+      })
+
+      socket.on("message_sent", (message:Message) => {
+         set((state) => ({
+            messages: [...state.messages, message] //add new message to messages
+         }))
+      })
+
+      socket.on("activity_updated", ({userId, activity}) => { //listen to activity_updated event
+         set((state) => {
+            const newActivities = new Map(state.userActivities) //create new Map of userActivities
+            newActivities.set(userId, activity) //update user activity
+            return {userActivities: newActivities}
+         })
+      })
+
+      set({isConnected: true})
+
      }
    },
 
