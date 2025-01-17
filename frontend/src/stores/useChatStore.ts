@@ -18,6 +18,7 @@ interface ChatStore {
    initSocket:(userId:string) => void, //initialize socket
    disconnectSocket:() => void, //disconnect socket
    sendMessage:(receiverId:string, senderId:string, content:string) => void; //send message
+   fetchMessages:(userId:string) => Promise<void>;
 
 }
 
@@ -58,7 +59,7 @@ export const useChatStore = create<ChatStore>((set,get) => ({
 
 
    //initialize socket and listen all socket events
-   initSocket: (userId:string) => {
+   initSocket: (userId) => {
      if(!get().isConnected) { //if socket is not connected
       socket.auth = {userId} 
       socket.connect() //connect socket
@@ -120,7 +121,28 @@ export const useChatStore = create<ChatStore>((set,get) => ({
       }
    },
 
-   sendMessage: ( ) => {
 
+   sendMessage: (receiverId, senderId, content ) => {
+      const socket = get().socket //get socket
+      if(!socket) return;
+
+      socket.emit("send_message", {receiverId, senderId, content})
+   },
+
+
+   fetchMessages: async(userId:string) => {
+      set({isLoading: true, error: null})
+
+      try {
+         const response = await axiosInstance.get(`/users/messages/${userId}`) //get messages
+         set({messages: response.data}) //set messages
+
+      } catch(error:any) {
+         set({error: error.response.data.message})
+
+      } finally {
+         set({isLoading:false})
+
+      }
    }
 })) 
