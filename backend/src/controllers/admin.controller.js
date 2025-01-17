@@ -84,32 +84,28 @@ export const deleteSong = async( req, res, next) => {
 }
 
 
-export const createAlbum = async (req,res,next) => {
-  try {
-    const {title,artist,releaseYear} = req.body;
-    const {audioFile} = req.files.audioFile;//get audio file
-    const {imageFile} = req.files.imageFile; //get image file
-    
-    const audioUrl = await uploadToCloudinary(audioFile) //upload audio file to cloudinary
-    const imageUrl = await uploadToCloudinary(imageFile) //upload image file to cloudinary
-  
-    const album = new Album ({ //create new album
-      title,
-      artist,
-      imageUrl,
-      audioUrl,
-      releaseYear,
-    })
+export const createAlbum = async (req, res, next) => {
+	try {
+		const { title, artist, releaseYear } = req.body; //get album details from request body
+		const { imageFile } = req.files; //get image file from request body files
 
-    await album.save() //save album to db
-    
-    res.status(200).json(album)
+		const imageUrl = await uploadToCloudinary(imageFile); //upload image file to cloudinary
 
-  } catch(error) {
-    console.log("Error in creating album", error)
-    next(error)
-  }
-}
+		const album = new Album({
+			title,
+			artist,
+			imageUrl,
+			releaseYear,
+		});
+
+		await album.save();
+
+		res.status(201).json(album);
+	} catch (error) {
+		console.log("Error in createAlbum", error);
+		next(error);
+	}
+};
 
 
 export const deleteAlbum = async (req,res,next) => { 

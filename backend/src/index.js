@@ -13,12 +13,16 @@ import authRoutes from './routes/auth.route.js'
 import songRoutes from './routes/song.route.js'
 import albumRoutes from './routes/album.route.js'
 import statRoutes from './routes/stat.route.js'
+import { createServer } from "http";
 
 dotenv.config();
 
 const app = express();
 const __dirname = path.resolve(); //get current directory
 const PORT = process.env.PORT || 5000;
+
+const httpServer = createServer(app)
+initializeSocket(httpServer)
 
 app.use(cors( {
   origin: "http://localhost:3000",
@@ -48,7 +52,7 @@ app.use((err,req,res,next) => {
   res.status(500).json({message: process.env.NODE_ENV === "production" ? "Internal Server Error" : err.message})
 })
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log("nodemon. Server is running on port " + PORT)
   connectDB() //connect to database
 })
