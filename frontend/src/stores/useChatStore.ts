@@ -57,8 +57,10 @@ export const useChatStore = create<ChatStore>((set,get) => ({
    },
 
 
+   //initialize socket and listen all socket events
    initSocket: (userId:string) => {
      if(!get().isConnected) { //if socket is not connected
+      socket.auth = {userId} 
       socket.connect() //connect socket
 
       socket.emit("user_connected", userId) //emit user_connected event to backend
@@ -112,7 +114,10 @@ export const useChatStore = create<ChatStore>((set,get) => ({
 
 
    disconnectSocket: () => {
-
+      if(get().isConnected) {
+         socket.disconnect()
+         set({isConnected: false})
+      }
    },
 
    sendMessage: ( ) => {
