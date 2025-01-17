@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+import { Message } from "../models/message.model.js";
 
 export const getAllUsers = async (req,res , next) => {
   try {
@@ -9,5 +10,30 @@ export const getAllUsers = async (req,res , next) => {
 
   } catch(error) {
     next(error)
+  }
+}
+
+
+export const getMessages = async (req,res, next) => {
+  try {
+    const myId = req.auth.userId; // get current user
+    const {userId} = req.params; //get user id from params
+
+    const messages = await Message.find({ //find all messages
+      $or:[
+        {
+          senderId: userId, receiverId:myId //find messages sent TO current user 
+        },
+        {
+          senderId: myId, receiverId:userId //find messages sent BY current user
+        }
+
+      ]
+    }).sort({createdAt:-1}) //sort by createdAt in descending order
+
+    res.status(200).json(messages)
+  } catch(error) {
+    next(error)
+    console.log("Error in getting messages", error)
   }
 }
