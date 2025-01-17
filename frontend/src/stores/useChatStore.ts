@@ -58,8 +58,32 @@ export const useChatStore = create<ChatStore>((set,get) => ({
 
 
    initSocket: (userId:string) => {
-     if(!get().isConnected) {
-      socket.connect()
+     if(!get().isConnected) { //if socket is not connected
+      socket.connect() //connect socket
+
+      socket.emit("user_connected", userId) //emit user_connected event to backend
+
+      socket.on("user_online", (users: string[]) => { //listen to user_online event with array of online users
+         set({onlineUsers: new Set(users)}) //set onlineUsers with new online users
+      })
+
+      socket.on("activities", (activities: [string,string][]) => { //listen to activities event with array of [userId, activity]
+         set({userActivities: new Map(activities)})//set userActivities with new activities
+      })
+
+      socket.on("user_connected", (userId:string) => {
+         set((state) => ({
+            onlineUsers: new Set([...state.onlineUsers, userId]) //add new user to onlineUsers
+         }))
+      })
+
+      socket.on("user_disconnected", (userId:string) => {
+         set((state) => {
+            const newOnlineUsers = new Set(state.onlineUsers)
+            newOnlineUsers.delete(userId) //delete user from onlineUsers
+            return {onlineUsers : newOnlineUsers} //return new onlineUsers
+         })
+      })
      }
    },
 
