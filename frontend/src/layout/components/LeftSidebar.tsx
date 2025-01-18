@@ -32,7 +32,7 @@ const LeftSidebar = () => {
             </Link>
 
             <SignedIn>
-               <Link to="/" className={cn(buttonVariants({
+               <Link to="/chat" className={cn(buttonVariants({
                   variant:"ghost",
                   className:"w-full justify-start text-white hover:bg-zinc-800"
                }))}>

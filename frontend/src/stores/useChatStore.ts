@@ -5,7 +5,7 @@ import {io} from 'socket.io-client'
 
 
 interface ChatStore { 
-   users:any[],
+   users:User[],
    isLoading:boolean,
    error: string | null,
    socket: any,
