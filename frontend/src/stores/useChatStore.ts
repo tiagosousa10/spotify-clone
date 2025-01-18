@@ -73,7 +73,7 @@ export const useChatStore = create<ChatStore>((set,get) => ({
 
       socket.emit("user_connected", userId) //emit user_connected event to backend
 
-      socket.on("user_online", (users: string[]) => { //listen to user_online event with array of online users
+      socket.on("users_online", (users: string[]) => { //listen to user_online event with array of online users
          set({onlineUsers: new Set(users)}) //set onlineUsers with new online users
       })
 
