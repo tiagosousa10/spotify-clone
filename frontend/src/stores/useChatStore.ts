@@ -25,7 +25,7 @@ interface ChatStore {
 }
 
 
-const baseURL = "http://localhost:5000" //backend url
+const baseURL = import.meta.env.MODE === "development" ? "http://localhost:5000" : "/" //backend url
 
 const socket = io(baseURL, {
    autoConnect: false, // only connect if user is authenticated

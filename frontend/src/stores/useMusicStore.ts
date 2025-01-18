@@ -8,7 +8,7 @@ interface MusicStore {
    albums: Album[], //imported from types
    isLoading: boolean,
    error: string | null,
-   currentAlbum: null,
+   currentAlbum: Album | null,
    featuredSongs: Song[],
    madeForYouSongs: Song[],
    trendingSongs: Song[],

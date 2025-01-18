@@ -31,11 +31,11 @@ const AlbumPage = () => {
    const handlePlayAlbum = () => {
 		if (!currentAlbum) return;
 
-		const isCurrentAlbumPlaying = currentAlbum?.songs.some((song) => song._id === currentSong?._id); //check if current album is playing
+		const isCurrentAlbumPlaying = currentAlbum.songs.some((song) => song._id === currentSong?._id); //check if current album is playing
 		if (isCurrentAlbumPlaying) togglePlay();
 		else {
 			// start playing the album from the beginning
-			playAlbum(currentAlbum?.songs, 0);
+			playAlbum(currentAlbum.songs, 0);
 		}
 	};
 
@@ -84,7 +84,7 @@ const AlbumPage = () => {
                      onClick={handlePlayAlbum}
                      className="w-14 h-14 rounded-full bg-green-500 hover:scale-105 transition-all"
                      >
-                        {isPlaying && currentAlbum.songs.some((song) => song._id === currentSong?._id) ? (
+                        {isPlaying && currentAlbum?.songs.some((song) => song._id === currentSong?._id) ? (
                            <Pause className='h-7 w-7 text-black' />
                         ) : (
                            <Play className='h-7 w-7 text-black' />
@@ -110,8 +110,8 @@ const AlbumPage = () => {
                {/* songs list*/}
                <div className='px-6'>
                   <div className='space-y-2 py-4'>
-                     {currentAlbum?.songs.map((song,index) => {
-                        const isCurrentSong = currentSong?._id === song.id //check if song is current song
+                     {currentAlbum &&  currentAlbum?.songs.map((song,index) => {
+                        const isCurrentSong = currentSong?._id === song._id //check if song is current song
 
                         return (
                         <div 
