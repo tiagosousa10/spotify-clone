@@ -3,9 +3,12 @@ import { useChatStore } from "@/stores/useChatStore"
 import { useUser } from "@clerk/clerk-react"
 import { useEffect } from "react"
 import UsersList from "./components/UsersList"
+import ChatHeader from "./components/ChatHeader"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
 
 const ChatPage = () => {
-  const {user} = useUser()
+  const {user} = useUser() //user from clerk
   const {messages, selectedUser, fetchUsers, fetchMessages} = useChatStore()
 
   //fetch users if user is logged in
@@ -30,9 +33,49 @@ const ChatPage = () => {
 
       <div className="grid lg:grid-cols-[300px_1fr] grid-cols-[80px_1fr] h-[calc(100vh-180px]">
         <UsersList />
+
+        {/*chat message */}
+        <div className="flex flex-col h-full">
+          {selectedUser ? (
+            <>
+              <ChatHeader />
+
+              {/*messages */}
+              <ScrollArea className="h-[calc(100vh-340px)]">
+                <div className="p-4 space-y-4">
+                  {messages.map((message) => (
+                    <div 
+                      key={message._id} 
+                      className={`flex items-start gap-3 
+                        ${message.senderId === user?.id ? "flex-row-reverse" : ""}`}
+                        >
+                          <Avatar className="size-8">
+                            <AvatarImage src={message.senderId === user?.id ? user.imageUrl : selectedUser.imageUrl} />
+                          </Avatar>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+            </>
+          ) : (
+            <NoConversationPlaceholder />
+          )}
+        </div>
       </div>
     </main>
   )
 }
 
 export default ChatPage
+
+
+
+const NoConversationPlaceholder = () => (
+	<div className='flex flex-col items-center justify-center h-full space-y-6'>
+		<img src='/spotify.png' alt='Spotify' className='size-16 animate-bounce' />
+		<div className='text-center'>
+			<h3 className='text-zinc-300 text-lg font-medium mb-1'>No conversation selected</h3>
+			<p className='text-zinc-500 text-sm'>Choose a friend to start chatting</p>
+		</div>
+	</div>
+);
