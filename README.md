@@ -400,7 +400,7 @@ ISC
 
 ## Author
 
-[Your Name]
+Tiago Sousa
 
 ## Repository
 
